@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		AB7E3D8C19FC25FD00AF755C /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = AB7E3D8B19FC25FD00AF755C /* main.c */; };
+		AB7E3D9419FC260C00AF755C /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB7E3D9219FC260C00AF755C /* GLUT.framework */; };
+		AB7E3D9519FC260C00AF755C /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB7E3D9319FC260C00AF755C /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +27,8 @@
 /* Begin PBXFileReference section */
 		AB7E3D8819FC25FD00AF755C /* 180_pro1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = 180_pro1; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB7E3D8B19FC25FD00AF755C /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		AB7E3D9219FC260C00AF755C /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
+		AB7E3D9319FC260C00AF755C /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +36,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB7E3D9419FC260C00AF755C /* GLUT.framework in Frameworks */,
+				AB7E3D9519FC260C00AF755C /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -41,6 +47,8 @@
 		AB7E3D7F19FC25FD00AF755C = {
 			isa = PBXGroup;
 			children = (
+				AB7E3D9219FC260C00AF755C /* GLUT.framework */,
+				AB7E3D9319FC260C00AF755C /* OpenGL.framework */,
 				AB7E3D8A19FC25FD00AF755C /* 180_pro1 */,
 				AB7E3D8919FC25FD00AF755C /* Products */,
 			);
@@ -202,6 +210,7 @@
 		AB7E3D9019FC25FD00AF755C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -209,6 +218,7 @@
 		AB7E3D9119FC25FD00AF755C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
