@@ -22,7 +22,6 @@
 #include <math.h>
 #include <stdio.h>
 
-
 float angle=0.0; // angle of rotation for the camera direction
 float lx=0.0f,lz=-1.0f,ly=0.0f;// actual vector representing the camera's direction
 float x=0.0f,z=5.0f;// XZ position of the camera
@@ -41,20 +40,6 @@ void drawBackground(){
     glVertex3f(-10, -2, 5);
     glVertex3f(15, -2, 5);
     glEnd();
-    
-    glPopMatrix();
-}
-
-void drawEdge(float ang, float xPos, float yPos, float zPos){
-    
-    // glColor3d(1, 0, 0);
-    glPushMatrix();
-    
-    glRotatef(ang, 0,0, 1);
-    glTranslatef(xPos, yPos, zPos);
-    
-    glScalef(1.2,size/5,size/5); //1.2* x, y/5, z/10
-    glutSolidCube(size);
     
     glPopMatrix();
 }
@@ -103,30 +88,6 @@ void drawBoundaries(){
     glPopMatrix();
 }
 
-void drawFace(float size){
-    
-    glPushMatrix();
-    
-    /* Upper edge. */
-    glColor3d(1, 0, 0);
-    drawEdge(0,0, size/2, size/2);
-    
-    /* Lower edge. */
-    drawEdge(0,0,-size/2, size/2);
-    
-    
-    /* Right edge. */
-    glColor3d(0, 1, 1);
-    drawEdge(90,0,-size/2, size/2);
-    
-    
-    /* Left edge. */
-    glColor3d(1, 1, 0);
-    drawEdge(-90,0,-size/2, size/2);
-    
-    
-    glPopMatrix();
-}
 void drawCircle(float radius){
     
     glPushMatrix();
@@ -218,7 +179,7 @@ void drawSolidT(float size){
 void drawPentagon(float radius, float xPos, float yPos){
     
     glPushMatrix();
-    glTranslatef(0,0,size/2);
+    glTranslatef(0,0,.7);
     glBegin(GL_POLYGON);
     
     glColor3d(0, 0, 1);
@@ -744,6 +705,7 @@ void drawFive(float size, float xPos, float yPos, float zPos){
     
     glPopMatrix();
 }
+
 void drawSix(float size, float xPos, float yPos, float zPos){
     glPushMatrix();
     glTranslatef(xPos,yPos, zPos);
@@ -841,9 +803,6 @@ void drawSeven(float size, float xPos, float yPos, float zPos){
     
 }
 
-
-
-
 void drawEight(float size, float xPos, float yPos, float zPos){
     glPushMatrix();
     glTranslatef(xPos,yPos, zPos);
@@ -936,18 +895,13 @@ void drawEight(float size, float xPos, float yPos, float zPos){
     glPopMatrix();
 }
 
-void drawBaseCube(float size, float xPos, float yPos, float zPos)
-{
+void drawNumbers(float size, float xPos, float yPos, float zPos){
     glPushMatrix();
-    glScalef(size, size, size);
-    glBegin(GL_QUAD_STRIP);
     
     
     
-    glEnd();
     glPopMatrix();
 }
-
 
 void drawCube(float xPos, float yPos, float zPos)
 {
@@ -962,9 +916,9 @@ void drawCube(float xPos, float yPos, float zPos)
     //bottom face
     glRotated(90, 1, 0, 0);
     drawBoundaries();
-    drawPentagon(0.3, 0, 0);
     
     
+    //back
     glRotated(90, 1, 0, 0);
     drawBoundaries();
     drawPentagon(0.3, 0, 0);
@@ -980,34 +934,9 @@ void drawCube(float xPos, float yPos, float zPos)
     //Left
     glRotated(180, 0, 1, 0);
     drawBoundaries();
-
+    drawPentagon(0.3, 0, 0);
+    
     glutWireCube(2);
-
-    /*Draw edges on six faces. */
-    // drawFace(size);
-    //drawSolidT(.2);
-    
-    
-//    glRotatef(90, 0,0, 0);
-//    // glScalef(0, 1, 0);
-//    // drawFace(size);
-//    
-//    glRotatef(90, 1,0, 0);
-//    // drawFace(size);
-//    //drawCircle(.3);
-//    
-//    
-//    glRotatef(90, 0,1, 0);
-//    // drawFace(size);
-//    
-    
-    //glRotatef(90, 0,0, 0);
-    // drawFace(size);
-    //drawCircle(.3);
-    
-    //glRotatef(90, 0,0, 0);
-    // drawFace(size);
-    // drawPentagon(.3, 0, 0);
     
     glPopMatrix();
 }
@@ -1034,32 +963,17 @@ void display(void)
               0.0f, 1.0f,  0.0f);
     
     /* modeling transformation */
+     drawBackground();
     
     /*Draw five cubes at different point.*/
-        for (int i=0; i<5; i++) {
-            if (i<3) {
-                drawCube(i*1.5, 0, -2.5*(i+1));
-            }else{
-                drawCube(i*1.5, 0, 2.5*(i-5));
-            }
+    for (int i=0; i<5; i++) {
+        if (i<3) {
+            drawCube(i*1.5, 0, -2.5*(i+1));
+        }else{
+            drawCube(i*1.5, 0, 2.5*(i-5));
         }
-    drawBackground();
-    
-    
-    //drawZero(.3, 0, 0, 0);
-    //drawOne(1, 0, 0, 0);
-    // drawTwo(.1, 0, 0, 0);
-    //drawThree(0.1, 2, 0, 0);
-    //drawFour(.3, 5, 0, 0);
-    //drawFive(.1,4,0,0);
-    // drawSix(.1, 0, 0, 0);
-    //drawSeven(.3, 0, 0, 0);
-    // drawEight(.1, 6, 0, 0);
-    // drawBoundaries(.2);
-   // drawCube(0, 0, 0);
-    
-    // drawFace(1);
-    
+    }
+   
     glutSwapBuffers();
 }
 
