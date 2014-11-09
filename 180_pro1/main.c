@@ -20,6 +20,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include <stdio.h>
+#include <time.h>
+#include <unistd.h>
 
 float angle=0.0; // angle of rotation for the camera direction
 float lx=0.0f,lz=-1.0f,ly=0.0f;// actual vector representing the camera's direction
@@ -283,6 +285,7 @@ void drawOne(float size, float xPos, float yPos, float zPos){
     glPushMatrix();
     glTranslatef(xPos,yPos, zPos);
     glScalef(size, size, size);
+    glNormal3f(1, 0, 1);
     
     for (int j=0; j<2; j++) {
         glBegin(GL_POLYGON);
@@ -713,7 +716,7 @@ void drawSix(float size, float xPos, float yPos, float zPos){
         glBegin(GL_TRIANGLE_STRIP);
         for (int i = 0; i<361; i++) {
             glVertex3f(1.75*cos(i*pi/180),
-                    -2+1.75*sin(i*pi/180),
+                       -2+1.75*sin(i*pi/180),
                        j);
             glVertex3f(3*cos(i*pi/180),
                        -2+3*sin(i*pi/180),
@@ -738,7 +741,7 @@ void drawSix(float size, float xPos, float yPos, float zPos){
                    -2+3*sin(i*pi/180),
                    1);
         glVertex3f(3*cos(i*pi/180),
-                  -2+ 3*sin(i*pi/180),
+                   -2+ 3*sin(i*pi/180),
                    0);
     }
     glEnd();
@@ -751,7 +754,7 @@ void drawSix(float size, float xPos, float yPos, float zPos){
                    1);
         
         glVertex3f(1.75*cos(i*pi/180),
-                  -2+ 1.75*sin(i*pi/180),
+                   -2+ 1.75*sin(i*pi/180),
                    0);
     }
     glEnd();
@@ -809,9 +812,11 @@ void drawEight(float size, float xPos, float yPos, float zPos){
     glTranslatef(xPos,yPos, zPos);
     glScalef(size, size, size);
     glRotatef(180, 0, 1, 0);
+    glNormal3f(1, 0, 0);
     
     /*Draw two three layers.*/
     for (int j=0; j<2; j++) {
+        glColor3f(1, 1, 0);
         
         /* Upper Faces */
         glBegin(GL_TRIANGLE_STRIP);
@@ -963,45 +968,6 @@ void drawNine(float size, float xPos, float yPos, float zPos){
     glPopMatrix();
 }
 
-void drawNumbers(int x, float size, float xPos, float yPos, float zPos){
-    glPushMatrix();
-    glScaled(size, size, size);
-//    int x = rand() % 10;
-//    switch (x) {
-//        case 0:
-            drawZero(.225, xPos, yPos, zPos);
-//            break;
-//        case 1:
-            drawOne(.3, xPos, yPos, zPos);
-//            break;
-//        case 2:
-            drawThree(.2, xPos, yPos, zPos);
-//            break;
-//        case 3:
-            drawTwo(.15, xPos, yPos, zPos);
-//            break;
-//        case 4:
-            drawFour(.2, xPos, yPos, zPos);
-//            break;
-//        case 5:
-            drawFive(.16, xPos, yPos, zPos);
-//            break;
-//        case 6:
-            drawSix(.2, xPos, yPos, zPos);
-//            break;
-//        case 7:
-            drawSeven(.18, xPos, yPos, zPos);
-//            break;
-//        case 8:
-            drawEight(.18, xPos, yPos, zPos);
-//            break;
-//        case 9:
-            drawNine(.2, xPos, yPos, zPos);
-            //break;
-   // }
-    glPopMatrix();
-}
-
 void drawCube(float xPos, float yPos, float zPos,int c)
 {
     glPushMatrix();
@@ -1024,7 +990,7 @@ void drawCube(float xPos, float yPos, float zPos,int c)
     glRotated(90, 1, 0, 0);
     drawBoundaries();
     
-    //back
+    //back with number eight
     glRotated(90, 1, 0, 0);
     drawBoundaries();
     drawEight(.07, 0, 0, .65);
@@ -1036,19 +1002,61 @@ void drawCube(float xPos, float yPos, float zPos,int c)
     
     //Right with number one
     glRotated(90, 0, 1, 0);
+    glNormal3f(0, 1, 0);
     drawBoundaries();
     glPushMatrix();
     glColor3f(0, 1, 0);
     glRotated(90, 0, 0, 1);
+   
     drawOne(.1, .05, 0, .5);
     glPopMatrix();
     
     //Left with pentagon
     glRotated(180, 0, 1, 0);
+    glNormal3f(0, 1, 0);
     drawBoundaries();
     drawPentagon(0.3, 0, 0);
     
     glutWireCube(2);
+    glPopMatrix();
+}
+
+void drawNumbers(int x, float size, float xPos, float yPos, float zPos){
+    glPushMatrix();
+    glScaled(size, size, size);
+    //    int x = rand() % 10;
+    switch (x) {
+        case 0:
+            drawZero(.225, xPos, yPos, zPos);
+            break;
+        case 1:
+            drawOne(.3, xPos, yPos, zPos);
+            break;
+        case 2:
+            drawThree(.2, xPos, yPos, zPos);
+            break;
+        case 3:
+            drawTwo(.15, xPos, yPos, zPos);
+            break;
+        case 4:
+            drawFour(.2, xPos, yPos, zPos);
+            break;
+        case 5:
+            drawFive(.16, xPos, yPos, zPos);
+            break;
+        case 6:
+            drawSix(.2, xPos, yPos, zPos);
+            break;
+        case 7:
+            drawSeven(.18, xPos, yPos, zPos);
+            break;
+        case 8:
+            drawEight(.18, xPos, yPos, zPos);
+            break;
+        case 9:
+            drawNine(.2, xPos, yPos, zPos);
+            break;
+    }
     glPopMatrix();
 }
 
@@ -1066,6 +1074,16 @@ void idle(){
     ang += rs;
     ex += .02;
     ez += .02;
+    
+    while (ex==.1) {
+        ex = 0;
+        ez=0;
+        drawNumbers(1,.6, 3-ex, 0, -2+ez);
+        
+    }
+}
+void update(){
+    sleep(1);
 }
 
 void display(void)
@@ -1082,13 +1100,13 @@ void display(void)
               x+lx, 1+ly,  z+lz,
               0.0f, 1.0f,  0.0f);
     
-    GLfloat lPos[]= {1,6,0,1};
+    GLfloat lPos[]= {1,6,0,1}; //the light position
     GLfloat lDif[]= {10,10,10,1};
     GLfloat lAmb[]= {.15,.15,.15,1};
     glLightfv(GL_LIGHT0, GL_DIFFUSE, lDif); //
     glLightfv(GL_LIGHT0, GL_AMBIENT, lAmb);
     glLightfv(GL_LIGHT0, GL_POSITION, lPos);
-    
+    clock_t start = clock(), diff;
     drawBackground();
     /*Draw five cubes at different point.*/
     for (int i=-1; i<2; i+=2) {
@@ -1099,11 +1117,17 @@ void display(void)
         drawCube(i*1.5, 0, -2.5, 2);
     }
     drawCube(0, 0, -5, 1); //the cube at the back
-    
     /* Draw numbers between the cubes. */
     //drawNumbers(.6, -3+ex, 0, -2+ez);
-    drawSix(.3, 0, 0, 0);
-    glutPostRedisplay(); //repaint the screen.
+    // sleep(1);
+    drawNumbers(8,.6, 3-ex, 0, -2+ez);
+    diff = clock() - start;
+    while (diff==3) {
+        drawNumbers(6,.6, -3+ex, 0, -2+ez);
+        
+        diff = 0;
+    }
+    //glutPostRedisplay(); //repaint the screen.
     glutSwapBuffers();
 }
 
