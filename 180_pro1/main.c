@@ -5,7 +5,6 @@
 //  Created by daisy_island on 10/25/14.
 //  Copyright (c) 2014 daisy_island. All rights reserved.
 //
-
 #ifdef __APPLE__      //unix
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -28,9 +27,11 @@ float x=0.0f,z=5.0f;// XZ position of the camera
 float size=1;
 float pi = 3.141592653;
 
+float ex=15, ez=0, rad=15;
+float rs=.01, ang=0;
+
 void drawBackground(){
     glPushMatrix();
-    
     glColor3f(1, 1, 1);
     glBegin(GL_QUAD_STRIP);
     glVertex3f(-10, 10, -10);
@@ -40,7 +41,6 @@ void drawBackground(){
     glVertex3f(-10, -2, 5);
     glVertex3f(15, -2, 5);
     glEnd();
-    
     glPopMatrix();
 }
 
@@ -276,7 +276,6 @@ void drawZero(float size, float xPos, float yPos, float zPos){
                    0);
     }
     glEnd();
-    
     
     glPopMatrix();
     
@@ -920,26 +919,41 @@ void drawSix(float size, float xPos, float yPos, float zPos){
 
 void drawNumbers(float size, float xPos, float yPos, float zPos){
     glPushMatrix();
-    
-    
-    
+    drawZero(.225, xPos, yPos, zPos);
+    drawOne(.3, xPos, yPos, zPos);
+    drawThree(.2, xPos, yPos, zPos);
+    drawTwo(.15, xPos, yPos, zPos);
+    drawFour(.2, xPos, yPos, zPos);
+    drawFive(.16, xPos, yPos, zPos);
+    drawSix(.2, xPos, yPos, zPos);
+    drawSeven(.18, xPos, yPos, zPos);
+    drawEight(.18, xPos, yPos, zPos);
+    drawNine(.2, xPos, yPos, zPos);
     glPopMatrix();
 }
 
-void drawCube(float xPos, float yPos, float zPos)
+void drawCube(float xPos, float yPos, float zPos,int c)
 {
     glPushMatrix();
     
     glTranslatef(xPos, yPos, zPos);
-    glColor3d(1, 1, 1);
+    switch (c) {
+        case 1:
+            glRotated(ang, ex, 1, ez);
+            break;
+            
+        case 2:
+            glRotated(ang, -ex, 1, -ez);
+            break;
+    }
     
+    glColor3d(1, 1, 1);
     drawBoundaries();
     drawSolidT(.3);
     
     //bottom face
     glRotated(90, 1, 0, 0);
     drawBoundaries();
-    
     
     //back
     glRotated(90, 1, 0, 0);
@@ -971,6 +985,15 @@ void init(void)
     glShadeModel (GL_FLAT);
 }
 
+void idle(int c){
+    glutPostRedisplay();
+    /*Clockwise rotate*/
+    ang += rs;
+    ex= cos(ang)*rad;
+    ez= sin(ang)*rad;
+    
+}
+
 void display(void)
 {
     /* clear the matrix */
@@ -985,20 +1008,30 @@ void display(void)
               x+lx, 1+ly,  z+lz,
               0.0f, 1.0f,  0.0f);
     
-    /* modeling transformation */
+    GLfloat lPos[]= {1,6,0,1};
+    GLfloat lDif[]= {10,10,10,1};
+    GLfloat lAmb[]= {.15,.15,.15,1};
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, lDif); //
+    glLightfv(GL_LIGHT0, GL_AMBIENT, lAmb);
+    glLightfv(GL_LIGHT0, GL_POSITION, lPos);
+    
+    //  drawNumbers(.3,0.5, 0, 0);
     //  drawBackground();
     //drawSix(.3, 0, 0, 0);
     // drawNine(0.3, 0, 0, 0);
     /*Draw five cubes at different point.*/
-        for (int i=0; i<5; i++) {
-            if (i<3) {
-                drawCube(i*1.5, 0, -2.5*(i+1));
-            }else{
-                drawCube(i*1.5, 0, 2.5*(i-5));
-            }
+    for (int i=0; i<5; i++) {
+        if (i<3) {
+            drawCube(i*1.5, 0, -2.5*(i+1),1);
+        }else{
+            drawCube(i*1.5, 0, 2.5*(i-5),2);
         }
+        
+    }
     
     
+    
+    glutPostRedisplay(); //repaint the screen.
     glutSwapBuffers();
 }
 
@@ -1029,7 +1062,6 @@ void keyboard(unsigned char key, int x, int y)
             x -= lx * fraction;
             z -= lz * fraction;
             break;
-            
     }
 }
 
@@ -1066,12 +1098,20 @@ int main(int argc, char** argv)
     glutCreateWindow (argv[0]);
     init ();
     
-    glutIdleFunc(display);
+    glutIdleFunc(idle);
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutKeyboardFunc(keyboard);
     glutSpecialFunc(processSpecialKeys);
-    glutPostRedisplay(); //repaint the screen.
+    
+    glEnable(GL_DEPTH_TEST);
+    glShadeModel(GL_SMOOTH);
+    
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    glEnable(GL_COLOR_MATERIAL);
+    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+    glFrontFace(GL_CW);
     
     glutMainLoop();
     return 0;
