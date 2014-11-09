@@ -133,9 +133,7 @@ void drawSolidT(float size){
     
     glScalef(size, size, size);
     glTranslatef(0,-.8, 1);
-    
     glBegin(GL_TRIANGLE_STRIP);
-    
     glColor3d(0, 0, 1);
     glVertex3f(-1,0,0);
     glVertex3f(1,0,0);
@@ -985,7 +983,7 @@ void init(void)
     glShadeModel (GL_FLAT);
 }
 
-void idle(int c){
+void idle(){
     glutPostRedisplay();
     /*Clockwise rotate*/
     ang += rs;
@@ -1015,21 +1013,16 @@ void display(void)
     glLightfv(GL_LIGHT0, GL_AMBIENT, lAmb);
     glLightfv(GL_LIGHT0, GL_POSITION, lPos);
     
-    //  drawNumbers(.3,0.5, 0, 0);
-    //  drawBackground();
-    //drawSix(.3, 0, 0, 0);
-    // drawNine(0.3, 0, 0, 0);
+    drawBackground();
     /*Draw five cubes at different point.*/
-    for (int i=0; i<5; i++) {
-        if (i<3) {
-            drawCube(i*1.5, 0, -2.5*(i+1),1);
-        }else{
-            drawCube(i*1.5, 0, 2.5*(i-5),2);
-        }
-        
+    for (int i=-1; i<2; i+=2) {
+        drawCube(i*3, 0, 0, 1);
     }
     
-    
+    for (int i=-1; i<2; i+=2) {
+        drawCube(i*1.5, 0, -2.5, 2);
+    }
+    drawCube(0, 0, -5, 1);
     
     glutPostRedisplay(); //repaint the screen.
     glutSwapBuffers();
