@@ -233,7 +233,7 @@ void drawZero(float size, float xPos, float yPos, float zPos){
     glTranslatef(xPos,yPos, zPos);
     glScalef(size, size, size);
     glScalef(1, 2.5, 1);
-   //glNormal3f(1, 0, 0);
+    glNormal3f(0, 0, -1);
     
     /*Draw two three layers.*/
     for (int j=0; j<2; j++) {
@@ -283,7 +283,7 @@ void drawOne(float size, float xPos, float yPos, float zPos){
     glPushMatrix();
     glTranslatef(xPos,yPos, zPos);
     glScalef(size, size, size);
-   // glNormal3f(1, 0, 1);
+    // glNormal3f(1, 0, 1);
     
     glColor3f(1, 1,0);
     for (int j=0; j<2; j++) {
@@ -333,6 +333,7 @@ void drawTwo(float size, float xPos, float yPos, float zPos){
     
     /* Upper Part */
     //faces
+    glColor3f(0, 0, 1);
     for (int j = 0 ; j<2; j++) {
         glBegin(GL_POLYGON);
         
@@ -356,6 +357,7 @@ void drawTwo(float size, float xPos, float yPos, float zPos){
         glEnd();
     }
     //volumes
+    glColor3f(1, 1, 0);
     glBegin(GL_QUAD_STRIP);
     glVertex3f(-2, -5, 1);
     glVertex3f(-2, -5, 0);
@@ -386,6 +388,7 @@ void drawTwo(float size, float xPos, float yPos, float zPos){
     glEnd();
     
     /* Upper part */
+    glColor3f(0, 0, 1);
     glRotatef(180, 0, 1, 0);
     //faces
     for (int j = 0 ; j<2; j++) {
@@ -402,6 +405,7 @@ void drawTwo(float size, float xPos, float yPos, float zPos){
     }
     
     /* Upper volumes */
+     glColor3f(1, 1, 0);
     glBegin(GL_TRIANGLE_STRIP);
     
     glVertex3f(2*cos(0*pi/180), -.3+2*sin(0*pi/180), 1);
@@ -441,7 +445,6 @@ void drawThree(float size, float xPos, float yPos, float zPos){
     glPushMatrix();
     glTranslatef(xPos,yPos, zPos);
     glScalef(size, size, size);
-    //glTranslatef(0,0, 8);
     glRotatef(180, 0, 1, 0);
     glNormal3f(0, 1, 0);
     
@@ -617,6 +620,7 @@ void drawFive(float size, float xPos, float yPos, float zPos){
     glScalef(size, size, size);
     
     /* Upper */
+    glColor3f(1, 1, 0);
     for (int i = 0;  i<2; i++) {
         
         glBegin(GL_POLYGON);
@@ -634,6 +638,7 @@ void drawFive(float size, float xPos, float yPos, float zPos){
         glEnd();
         
     }
+    glColor3f(0, 0, 1);
     /* Upper Volumes */
     glBegin(GL_QUAD_STRIP);
     glVertex3f(-3, 1.2, 1);
@@ -651,6 +656,7 @@ void drawFive(float size, float xPos, float yPos, float zPos){
     glEnd();
     
     /* Lower Part*/
+    glColor3f(1, 1, 0);
     glRotated(180, 0, 1, 0);
     
     for (int i = 0 ; i <2 ; i++) {
@@ -668,9 +674,8 @@ void drawFive(float size, float xPos, float yPos, float zPos){
     }
     
     //volumes
+    glColor3f(0, 0, 1);
     glBegin(GL_TRIANGLE_STRIP);
-    glColor3d(1, 0, 0);
-    
     glVertex3f(2*cos(31*pi/180), -1+2*sin(31*pi/180), 1);
     glVertex3f(2*cos(31*pi/180), -1+2*sin(31*pi/180), 0);
     
@@ -912,6 +917,7 @@ void drawNine(float size, float xPos, float yPos, float zPos){
     glScalef(size, size, size);
     
     /* Upper Faces */
+    glColor3f(0, 1, 1);
     for (int j=0; j<2; j++) {
         glBegin(GL_TRIANGLE_STRIP);
         for (int i = 0; i<361; i++) {
@@ -933,6 +939,7 @@ void drawNine(float size, float xPos, float yPos, float zPos){
     }
     
     /* Outter Volume */
+    glColor3f(0, 0, 1);
     glBegin(GL_QUAD_STRIP);
     glColor3d(1, 0, 0);
     
@@ -982,61 +989,102 @@ void drawCube(float xPos, float yPos, float zPos,int c)
     switch (c) {
         case 1:
             glRotated(ang, 0, 1, 0);
+            //front with triangle
+            glPushMatrix();
+            glNormal3f(0, 0, 1);
+            drawBoundaries();
+            drawSolidT(.3);
+            glPopMatrix();
+            
+            //bottom face
+            glPushMatrix();
+            glRotated(90, 1, 0, 0);
+            drawBoundaries();
+            glPopMatrix();
+            
+            //back with number eight
+            glPushMatrix();
+            glNormal3f(0, 0, -1);
+            glRotated(180, 1, 0, 0);
+            drawBoundaries();
+            drawEight(.07, 0, 0, .65);
+            glPopMatrix();
+            
+            //Upper with circle
+            glPushMatrix();
+            glNormal3f(0, 1, 0);
+            glRotated(90, -1, 0, 0);
+            drawBoundaries();
+            drawCircle(.3);
+            glPopMatrix();
+            
+            //Right with number one
+            glPushMatrix();
+            glNormal3f(1, 0, 0);
+            glRotated(90, 0, 1, 0);
+            drawBoundaries();
+            glColor3f(0, 1, 0);
+            drawOne(.1, .05, 0, .5);
+            glPopMatrix();
+            
+            //Left with pentagon
+            glPushMatrix();
+            glNormal3f(-1, 0, 0);
+            glRotated(90, 0, -1, 0);
+            drawBoundaries();
+            drawPentagon(0.3, 0, 0);
+            glPopMatrix();
             break;
             
         case 2:
             glRotated(-ang, 0, 1, 0);
+            //front with triangle
+            glPushMatrix();
+            glNormal3f(0, 0, -1);
+            drawBoundaries();
+            drawSolidT(.3);
+            glPopMatrix();
+            
+            //bottom face
+            glPushMatrix();
+            glRotated(90, 1, 0, 0);
+            drawBoundaries();
+            glPopMatrix();
+            
+            //back with number eight
+            glPushMatrix();
+            glNormal3f(0, 0, 1);
+            glRotated(180, 1, 0, 0);
+            drawBoundaries();
+            drawEight(.07, 0, 0, .65);
+            glPopMatrix();
+            
+            //Upper with circle
+            glPushMatrix();
+            glNormal3f(0, -1, 0);
+            glRotated(90, -1, 0, 0);
+            drawBoundaries();
+            drawCircle(.3);
+            glPopMatrix();
+            
+            //Right with number one
+            glPushMatrix();
+            glNormal3f(-1, 0, 0);
+            glRotated(90, 0, 1, 0);
+            drawBoundaries();
+            glColor3f(0, 1, 0);
+            drawOne(.1, .05, 0, .5);
+            glPopMatrix();
+            
+            //Left with pentagon
+            glPushMatrix();
+            glNormal3f(1, 0, 0);
+            glRotated(90, 0, -1, 0);
+            drawBoundaries();
+            drawPentagon(0.3, 0, 0);
+            glPopMatrix();
             break;
     }
-    //front with triangle
-   // glPushMatrix();
-    glNormal3f(0, 0, 1);
-    drawBoundaries();
-    drawSolidT(.3);
-    //glPopMatrix();
-    
-    //bottom face
-   // glPushMatrix();
-    glRotated(90, 1, 0, 0);
-    drawBoundaries();
-    //glPopMatrix();
-    
-    //back with number eight
-    //glPushMatrix();
-    glNormal3f(0, 0, -1);
-    glRotated(90, 1, 0, 0);
-    drawBoundaries();
-    drawEight(.07, 0, 0, .65);
-    //glPopMatrix();
-    
-    //Upper with circle
-    //glPushMatrix();
-    glNormal3f(0, 1, 0);
-    glRotated(90, 1, 0, 0);
-    drawBoundaries();
-    drawCircle(.3);
-    //glPopMatrix();
-    
-    //Right with number one
-    //glPushMatrix();
-    glNormal3f(1, 0, 0);
-    glRotated(90, 0, 1, 0);
-    drawBoundaries();
-    glPushMatrix();
-    glColor3f(0, 1, 0);
-    glRotated(90, 0, 0, 1);
-    drawOne(.1, .05, 0, .5);
-    glPopMatrix();
-    //glPopMatrix();
-    
-    //Left with pentagon
-    //glPushMatrix();
-    glNormal3f(-1, 0, 0);
-    glRotated(180, 0, 1, 0);
-    drawBoundaries();
-    drawPentagon(0.3, 0, 0);
-    //glPopMatrix();
-    
     glutWireCube(2);
     glPopMatrix();
 }
@@ -1108,7 +1156,7 @@ void display(void)
               x+lx, y+ly,  z+lz,
               0.0f, 1.0f,  0.0f);
     
-    GLfloat lPos[]= {0,6,0,1}; //the light position
+    GLfloat lPos[]= {6,5,0,1}; //the light position
     GLfloat lDif[]= {10,10,10,1};
     GLfloat lAmb[]= {.15,.15,.15,1};
     glLightfv(GL_LIGHT0, GL_DIFFUSE, lDif); //set the light to the position declared above.
