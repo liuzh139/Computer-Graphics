@@ -50,7 +50,7 @@ void drawBoundaries(){
     glScalef(.1, .1, .1);
     /* Outter */
     
-    glColor3f(0, 0, 0);
+    glColor3f(1, 1, 1);
     glBegin(GL_QUAD_STRIP);
     glVertex3f(-5, 5, 7);
     glVertex3f(-7, 7, 7);
@@ -1085,7 +1085,6 @@ void drawCube(float xPos, float yPos, float zPos,int c)
             glPopMatrix();
             break;
     }
-    glutWireCube(2);
     glPopMatrix();
 }
 
@@ -1270,6 +1269,8 @@ int main(int argc, char** argv)
     glEnable(GL_LIGHT0);
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE); //set the color material
+    GLfloat lWhite[] ={1.0, 1.0, 1.0,1.0};
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, lWhite);
     glFrontFace(GL_CW);
     
     glutMainLoop();
