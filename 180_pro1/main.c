@@ -42,21 +42,6 @@ void drawBackground(){
     glVertex3f(-10, -2, 5);
     glVertex3f(10, -2, 5);
     glEnd();
-    /* Left baffle */
-    //    glBegin(GL_POLYGON);
-    //    glVertex3f(-10, 5, -2);
-    //    glVertex3f(-3, 5, -2);
-    //    glVertex3f(-3, -2, -2);
-    //    glVertex3f(-10, -2, -2);
-    //    glEnd();
-    //    /* Right baffle */
-    //    glBegin(GL_POLYGON);
-    //    glVertex3f(3, -2, -2);
-    //    glVertex3f(3, 5, -2);
-    //    glVertex3f(10, 5, -2);
-    //    glVertex3f(10, -2, -2);
-    //    glEnd();
-    
     glPopMatrix();
 }
 
@@ -117,7 +102,6 @@ void drawCircle(float radius){
         float degInRad = i*pi/180;
         glVertex3f(cos(degInRad)*radius,sin(degInRad)*radius,0);
     }
-    
     glEnd();
     
     glBegin(GL_POLYGON);
@@ -186,8 +170,6 @@ void drawSolidT(float size){
     glVertex3f(-1,0,0);
     
     glEnd();
-    
-    glEnd();
     glPopMatrix();
 }
 
@@ -251,7 +233,7 @@ void drawZero(float size, float xPos, float yPos, float zPos){
     glTranslatef(xPos,yPos, zPos);
     glScalef(size, size, size);
     glScalef(1, 2.5, 1);
-    glNormal3f(1, 0, 0);
+   //glNormal3f(1, 0, 0);
     
     /*Draw two three layers.*/
     for (int j=0; j<2; j++) {
@@ -301,7 +283,7 @@ void drawOne(float size, float xPos, float yPos, float zPos){
     glPushMatrix();
     glTranslatef(xPos,yPos, zPos);
     glScalef(size, size, size);
-    glNormal3f(1, 0, 1);
+   // glNormal3f(1, 0, 1);
     
     glColor3f(1, 1,0);
     for (int j=0; j<2; j++) {
@@ -461,10 +443,11 @@ void drawThree(float size, float xPos, float yPos, float zPos){
     glScalef(size, size, size);
     //glTranslatef(0,0, 8);
     glRotatef(180, 0, 1, 0);
+    glNormal3f(0, 1, 0);
     
     /*Draw two three layers.*/
     for (int j=0; j<2; j++) {
-        
+        glColor3f(1, 0, 0);
         /* Upper Faces */
         glBegin(GL_TRIANGLE_STRIP);
         for (int i = 0; i<290; i++) {
@@ -492,7 +475,7 @@ void drawThree(float size, float xPos, float yPos, float zPos){
     
     /* Upper Volume */
     glBegin(GL_QUAD_STRIP);
-    glColor3d(1, 0, 0);
+    glColor3d(1, 1, 0);
     
     glVertex3f(1.25*cos(0*pi/180), 3+1.25*sin(0*pi/180), 1);
     glVertex3f(1.25*cos(0*pi/180), 3+1.25*sin(0*pi/180), 0);
@@ -1006,39 +989,53 @@ void drawCube(float xPos, float yPos, float zPos,int c)
             break;
     }
     //front with triangle
+   // glPushMatrix();
+    glNormal3f(0, 0, 1);
     drawBoundaries();
     drawSolidT(.3);
+    //glPopMatrix();
     
     //bottom face
+   // glPushMatrix();
     glRotated(90, 1, 0, 0);
     drawBoundaries();
+    //glPopMatrix();
     
     //back with number eight
+    //glPushMatrix();
+    glNormal3f(0, 0, -1);
     glRotated(90, 1, 0, 0);
     drawBoundaries();
     drawEight(.07, 0, 0, .65);
+    //glPopMatrix();
     
     //Upper with circle
+    //glPushMatrix();
+    glNormal3f(0, 1, 0);
     glRotated(90, 1, 0, 0);
     drawBoundaries();
     drawCircle(.3);
+    //glPopMatrix();
     
     //Right with number one
+    //glPushMatrix();
+    glNormal3f(1, 0, 0);
     glRotated(90, 0, 1, 0);
-    glNormal3f(0, 1, 0);
     drawBoundaries();
     glPushMatrix();
     glColor3f(0, 1, 0);
     glRotated(90, 0, 0, 1);
-    
     drawOne(.1, .05, 0, .5);
     glPopMatrix();
+    //glPopMatrix();
     
     //Left with pentagon
+    //glPushMatrix();
+    glNormal3f(-1, 0, 0);
     glRotated(180, 0, 1, 0);
-    glNormal3f(0, 1, 0);
     drawBoundaries();
     drawPentagon(0.3, 0, 0);
+    //glPopMatrix();
     
     glutWireCube(2);
     glPopMatrix();
@@ -1093,8 +1090,8 @@ void idle(){
     glutPostRedisplay();
     /*Update the angles used to rotate.*/
     ang += rs;
-    ex += .02;
-    ez += .02;
+    ex += .04;
+    ez += .04;
 }
 
 void display(void)
@@ -1110,12 +1107,14 @@ void display(void)
     gluLookAt(	x, y, z,
               x+lx, y+ly,  z+lz,
               0.0f, 1.0f,  0.0f);
-    GLfloat lPos[]= {5,6,0,1}; //the light position
+    
+    GLfloat lPos[]= {0,6,0,1}; //the light position
     GLfloat lDif[]= {10,10,10,1};
     GLfloat lAmb[]= {.15,.15,.15,1};
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, lDif); //
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, lDif); //set the light to the position declared above.
     glLightfv(GL_LIGHT0, GL_AMBIENT, lAmb);
     glLightfv(GL_LIGHT0, GL_POSITION, lPos);
+    
     drawBackground();
     /*Draw five cubes at different point.*/
     for (int i=-1; i<2; i+=2) {
@@ -1130,8 +1129,12 @@ void display(void)
     drawNumbers(0, .5, 5-ex, -1, -3+ez);
     drawNumbers(7, .6, -10+ex, -1, -8+ez);
     drawNumbers(8, .6, 12-ex, -1, -10+ez);
-    drawNumbers(4, .6, -17+ex, -1, -16+ex);
-    drawNumbers(6, .6, 19-ex, -1, -18+ex);
+    drawNumbers(4, .6, -17+ex, -1, -16+ez);
+    drawNumbers(6, .6, 19-ex, -1, -18+ez);
+    drawNumbers(2, .6, -24+ex, -1, -23+ez);
+    drawNumbers(9, .6, 26-ex, -.6, -25+ez);
+    drawNumbers(3, .6, 31-ex, -1, -30+ez);
+    drawNumbers(5, .6, -33+ex, -1, -32+ez);
     
     glutSwapBuffers();
 }
@@ -1200,10 +1203,10 @@ void processSpecialKeys(int key, int xx, int yy) {
 int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
-    glutInitDisplayMode (GLUT_SINGLE| GLUT_RGB |GLUT_DEPTH);
+    glutInitDisplayMode(GLUT_RGB |GLUT_DOUBLE |GLUT_DEPTH);
     glutInitWindowSize (500, 500);
     glutInitWindowPosition (100, 100);
-    glutCreateWindow (argv[0]);
+    glutCreateWindow ("Zhenyu Liu 180_hw2");
     init ();
     
     glutIdleFunc(idle);
@@ -1218,7 +1221,7 @@ int main(int argc, char** argv)
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
     glEnable(GL_COLOR_MATERIAL);
-    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE); //set the color material
     glFrontFace(GL_CW);
     
     glutMainLoop();
