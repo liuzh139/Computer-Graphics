@@ -25,7 +25,7 @@
 
 float angle=0.0; // angle of rotation for the camera direction
 float lx=0.0f,lz=-1.0f,ly=0.0f;// actual vector representing the camera's direction
-float x=0.0f,z=5.0f;// XZ position of the camera
+float x=0.0f,y=1.0f, z=5.0f;// XZ position of the camera
 float size=1;
 float pi = 3.141592653;
 float ex=0, ez=0, rad=15;
@@ -42,6 +42,21 @@ void drawBackground(){
     glVertex3f(-10, -2, 5);
     glVertex3f(10, -2, 5);
     glEnd();
+    /* Left baffle */
+    //    glBegin(GL_POLYGON);
+    //    glVertex3f(-10, 5, -2);
+    //    glVertex3f(-3, 5, -2);
+    //    glVertex3f(-3, -2, -2);
+    //    glVertex3f(-10, -2, -2);
+    //    glEnd();
+    //    /* Right baffle */
+    //    glBegin(GL_POLYGON);
+    //    glVertex3f(3, -2, -2);
+    //    glVertex3f(3, 5, -2);
+    //    glVertex3f(10, 5, -2);
+    //    glVertex3f(10, -2, -2);
+    //    glEnd();
+    
     glPopMatrix();
 }
 
@@ -234,11 +249,15 @@ void drawPentagon(float radius, float xPos, float yPos){
 void drawZero(float size, float xPos, float yPos, float zPos){
     glPushMatrix();
     glTranslatef(xPos,yPos, zPos);
-    glScalef(1, 2, 0);
     glScalef(size, size, size);
+    glScalef(1, 2.5, 1);
+    glNormal3f(1, 0, 0);
     
-    /*Draw layers.*/
+    /*Draw two three layers.*/
     for (int j=0; j<2; j++) {
+        glColor3f(1, 1, 0);
+        
+        /* Upper Faces */
         glBegin(GL_TRIANGLE_STRIP);
         for (int i = 0; i<361; i++) {
             glVertex3f(0+1.5*cos(i*pi/180),
@@ -250,12 +269,11 @@ void drawZero(float size, float xPos, float yPos, float zPos){
         }
         glEnd();
     }
-    
-    /* Volumes */
+    /* Upper Volume */
     glBegin(GL_QUAD_STRIP);
     glColor3d(1, 0, 0);
     
-    for(int i=0; i<360; i++){
+    for(int i=0; i<361; i++){
         glVertex3f(3*cos(i*pi/180),
                    3*sin(i*pi/180),
                    1);
@@ -266,7 +284,7 @@ void drawZero(float size, float xPos, float yPos, float zPos){
     glEnd();
     
     glBegin(GL_QUAD_STRIP);
-    for(int i=0; i<360; i++){
+    for(int i=0; i<361; i++){
         glVertex3f(1.5*cos(i*pi/180),
                    1.5*sin(i*pi/180),
                    1);
@@ -276,9 +294,7 @@ void drawZero(float size, float xPos, float yPos, float zPos){
                    0);
     }
     glEnd();
-    
     glPopMatrix();
-    
 }
 
 void drawOne(float size, float xPos, float yPos, float zPos){
@@ -287,6 +303,7 @@ void drawOne(float size, float xPos, float yPos, float zPos){
     glScalef(size, size, size);
     glNormal3f(1, 0, 1);
     
+    glColor3f(1, 1,0);
     for (int j=0; j<2; j++) {
         glBegin(GL_POLYGON);
         glVertex3f(-1, 4, j);
@@ -304,6 +321,7 @@ void drawOne(float size, float xPos, float yPos, float zPos){
     }
     
     /*Give volumes.*/
+    glColor3f(0, 0, 1);
     glBegin(GL_QUAD_STRIP);
     glVertex3f(-3, 2, 1);
     glVertex3f(-3, 2, 0);
@@ -373,17 +391,12 @@ void drawTwo(float size, float xPos, float yPos, float zPos){
     glVertex3f(2*cos(250*pi/180),
                2*sin(250*pi/180),
                0);
-    //    glVertex3f(0, -2, 1);
-    //    glVertex3f(0, -2, 0);
-    
     glVertex3f(4*cos(260*pi/180),
                4*sin(260*pi/180),
                1);
     glVertex3f(4*cos(260*pi/180),
                4*sin(260*pi/180),
                0);
-    //    glVertex3f(0, -4, 1);
-    //    glVertex3f(0, -4, 0);
     
     glVertex3f(-2, -5, 1);
     glVertex3f(-2, -5, 0);
@@ -402,9 +415,6 @@ void drawTwo(float size, float xPos, float yPos, float zPos){
             glVertex3f(4*cos(i*pi/180),
                        -0.3+4*sin(i*pi/180),
                        j);
-            //            glVertex3f(4*cos((i+1)*pi/180),
-            //                       -0.3+4*sin((i+1)*pi/180),
-            //                       j);
         }
         glEnd();
     }
@@ -552,6 +562,7 @@ void drawFour(float size, float xPos, float yPos, float zPos){
     glScalef(size, size, size);
     
     /* Draw the surfaces. */
+    glColor3f(0, 1, 0);
     for (int j=0; j<2; j++) {
         glBegin(GL_POLYGON);
         glVertex3f(-1, 6, j);
@@ -575,6 +586,7 @@ void drawFour(float size, float xPos, float yPos, float zPos){
         glEnd();
     }
     
+    glColor3f(1, 1, 0);
     /*Give volumes.*/
     glBegin(GL_QUAD_STRIP);
     glVertex3f(-1, 6, 1);
@@ -758,6 +770,17 @@ void drawSix(float size, float xPos, float yPos, float zPos){
                    0);
     }
     glEnd();
+    
+    glBegin(GL_QUAD_STRIP);
+    glVertex3f(-3, -2, 0);
+    glVertex3f(-3, -2, 1);
+    glVertex3f(-.8, 6, 0);
+    glVertex3f(-.8, 6, 1);
+    glVertex3f(.8, 6, 0);
+    glVertex3f(.8, 6, 1);
+    glVertex3f(-1.5, -1, 0);
+    glVertex3f(-1.5, -1, 1);
+    glEnd();
     glPopMatrix();
     
 }
@@ -768,6 +791,7 @@ void drawSeven(float size, float xPos, float yPos, float zPos){
     glScalef(size, size, size);
     
     /* Faces. */
+    glColor3f(1,0 , 0);
     for (int j = 0;  j < 2 ; j ++) {
         glBegin(GL_POLYGON);
         
@@ -787,6 +811,7 @@ void drawSeven(float size, float xPos, float yPos, float zPos){
         glEnd();
     }
     /* Volumes. */
+    glColor3f(0, 0, 1);
     glBegin(GL_QUAD_STRIP);
     glVertex3f(-3, 3, 1);
     glVertex3f(-3, 3, 0);
@@ -811,8 +836,6 @@ void drawEight(float size, float xPos, float yPos, float zPos){
     glPushMatrix();
     glTranslatef(xPos,yPos, zPos);
     glScalef(size, size, size);
-    glRotatef(180, 0, 1, 0);
-    glNormal3f(1, 0, 0);
     
     /*Draw two three layers.*/
     for (int j=0; j<2; j++) {
@@ -820,7 +843,7 @@ void drawEight(float size, float xPos, float yPos, float zPos){
         
         /* Upper Faces */
         glBegin(GL_TRIANGLE_STRIP);
-        for (int i = 0; i<360; i++) {
+        for (int i = 0; i<361; i++) {
             glVertex3f(0+1.25*cos(i*pi/180),
                        3+1.25*sin(i*pi/180),
                        j);
@@ -832,7 +855,7 @@ void drawEight(float size, float xPos, float yPos, float zPos){
         
         /* Lower Faces*/
         glBegin(GL_TRIANGLE_STRIP);
-        for(int i=0; i<360; i++){
+        for(int i=0; i<361; i++){
             glVertex3f(0+1.25*cos(i*pi/180),
                        -2.5+1.25*sin(i*pi/180),
                        j);
@@ -847,7 +870,7 @@ void drawEight(float size, float xPos, float yPos, float zPos){
     glBegin(GL_QUAD_STRIP);
     glColor3d(1, 0, 0);
     
-    for(int i=0; i<360; i++){
+    for(int i=0; i<361; i++){
         glVertex3f(3*cos(i*pi/180),
                    3+3*sin(i*pi/180),
                    1);
@@ -858,7 +881,7 @@ void drawEight(float size, float xPos, float yPos, float zPos){
     glEnd();
     
     glBegin(GL_QUAD_STRIP);
-    for(int i=0; i<360; i++){
+    for(int i=0; i<361; i++){
         glVertex3f(1.25*cos(i*pi/180),
                    3+1.25*sin(i*pi/180),
                    1);
@@ -874,7 +897,7 @@ void drawEight(float size, float xPos, float yPos, float zPos){
     glColor3d(1, 0, 0);
     
     
-    for(int i=0; i<360; i++){
+    for(int i=0; i<361; i++){
         glVertex3f(3*cos(i*pi/180),
                    -2.5+3*sin(i*pi/180),
                    1);
@@ -885,7 +908,7 @@ void drawEight(float size, float xPos, float yPos, float zPos){
     glEnd();
     
     glBegin(GL_QUAD_STRIP);
-    for(int i=0; i<360; i++){
+    for(int i=0; i<361; i++){
         glVertex3f(1.25*cos(i*pi/180),
                    -2.5+1.25*sin(i*pi/180),
                    1);
@@ -930,7 +953,7 @@ void drawNine(float size, float xPos, float yPos, float zPos){
     glBegin(GL_QUAD_STRIP);
     glColor3d(1, 0, 0);
     
-    for(int i=0; i<360; i++){
+    for(int i=0; i<361; i++){
         glVertex3f(3*cos(i*pi/180),
                    3*sin(i*pi/180),
                    1);
@@ -942,7 +965,7 @@ void drawNine(float size, float xPos, float yPos, float zPos){
     
     /* Inner Volume */
     glBegin(GL_QUAD_STRIP);
-    for(int i=0; i<360; i++){
+    for(int i=0; i<361; i++){
         glVertex3f(1.75*cos(i*pi/180),
                    1.75*sin(i*pi/180),
                    1);
@@ -1007,7 +1030,7 @@ void drawCube(float xPos, float yPos, float zPos,int c)
     glPushMatrix();
     glColor3f(0, 1, 0);
     glRotated(90, 0, 0, 1);
-   
+    
     drawOne(.1, .05, 0, .5);
     glPopMatrix();
     
@@ -1024,7 +1047,6 @@ void drawCube(float xPos, float yPos, float zPos,int c)
 void drawNumbers(int x, float size, float xPos, float yPos, float zPos){
     glPushMatrix();
     glScaled(size, size, size);
-    //    int x = rand() % 10;
     switch (x) {
         case 0:
             drawZero(.225, xPos, yPos, zPos);
@@ -1069,21 +1091,10 @@ void init(void)
 
 void idle(){
     glutPostRedisplay();
-    
     /*Update the angles used to rotate.*/
     ang += rs;
     ex += .02;
     ez += .02;
-    
-    while (ex==.1) {
-        ex = 0;
-        ez=0;
-        drawNumbers(1,.6, 3-ex, 0, -2+ez);
-        
-    }
-}
-void update(){
-    sleep(1);
 }
 
 void display(void)
@@ -1096,38 +1107,32 @@ void display(void)
     glLoadIdentity();
     
     // Set the camera
-    gluLookAt(	x, 1.0f, z,
-              x+lx, 1+ly,  z+lz,
+    gluLookAt(	x, y, z,
+              x+lx, y+ly,  z+lz,
               0.0f, 1.0f,  0.0f);
-    
-    GLfloat lPos[]= {1,6,0,1}; //the light position
+    GLfloat lPos[]= {5,6,0,1}; //the light position
     GLfloat lDif[]= {10,10,10,1};
     GLfloat lAmb[]= {.15,.15,.15,1};
     glLightfv(GL_LIGHT0, GL_DIFFUSE, lDif); //
     glLightfv(GL_LIGHT0, GL_AMBIENT, lAmb);
     glLightfv(GL_LIGHT0, GL_POSITION, lPos);
-    clock_t start = clock(), diff;
     drawBackground();
     /*Draw five cubes at different point.*/
     for (int i=-1; i<2; i+=2) {
-        drawCube(i*3, 0, 0, 1);
+        drawCube(i*2.5, 0, 1, 1);
     }
-    
     for (int i=-1; i<2; i+=2) {
         drawCube(i*1.5, 0, -2.5, 2);
     }
     drawCube(0, 0, -5, 1); //the cube at the back
     /* Draw numbers between the cubes. */
-    //drawNumbers(.6, -3+ex, 0, -2+ez);
-    // sleep(1);
-    drawNumbers(8,.6, 3-ex, 0, -2+ez);
-    diff = clock() - start;
-    while (diff==3) {
-        drawNumbers(6,.6, -3+ex, 0, -2+ez);
-        
-        diff = 0;
-    }
-    //glutPostRedisplay(); //repaint the screen.
+    drawNumbers(1, .6, -3+ex, -1, -1+ez);
+    drawNumbers(0, .5, 5-ex, -1, -3+ez);
+    drawNumbers(7, .6, -10+ex, -1, -8+ez);
+    drawNumbers(8, .6, 12-ex, -1, -10+ez);
+    drawNumbers(4, .6, -17+ex, -1, -16+ex);
+    drawNumbers(6, .6, 19-ex, -1, -18+ex);
+    
     glutSwapBuffers();
 }
 
@@ -1141,7 +1146,8 @@ void reshape (int w, int h)
 }
 
 void keyboard(unsigned char key, int x, int y)
-{float fraction = 1.0f;
+{
+    float fraction = 1.0f;
     switch (key) {
         case 27:
         case 'q':
@@ -1152,15 +1158,23 @@ void keyboard(unsigned char key, int x, int y)
             x += lx * fraction;
             z += lz * fraction;
             break;
-            
         case 83:
         case 's':
             x -= lx * fraction;
             z -= lz * fraction;
             break;
+        case 'a':
+        case 65:
+            x -= lx * fraction;
+            y -= ly * fraction;
+            break;
+        case 'd':
+        case 68:
+            x += lx * fraction;
+            y += ly *fraction;
+            break;
     }
 }
-
 void processSpecialKeys(int key, int xx, int yy) {
     switch (key) {
         case GLUT_KEY_LEFT :
@@ -1183,7 +1197,6 @@ void processSpecialKeys(int key, int xx, int yy) {
             break;
     }
 }
-
 int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
