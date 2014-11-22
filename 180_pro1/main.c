@@ -1151,9 +1151,9 @@ void display(void)
     glLoadIdentity();
     
     // Set the camera
-    gluLookAt(	x, y, z,
-              x+lx, y+ly,  z+lz,
-              0.0f, 1.0f,  0.0f);
+    gluLookAt(	 x,    y,     z,     //eye position
+              x+lx, y+ly,  z+lz,     //points to look at
+              0.0f, 1.0f,  0.0f);    //the 'up' axis 
     
     GLfloat lPos[]= {6,5,0,1}; //the light position
     GLfloat lDif[]= {10,10,10,1};
